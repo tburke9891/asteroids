@@ -7,7 +7,6 @@ from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from player import Player
 from shot import Shot
 
-
 from logger import log_state, log_event
 
 def main():
@@ -24,8 +23,6 @@ def main():
     Shot.containers = (shots, updatable, drawable) # Set the containers for the Shot class
     AsteroidField.containers = (updatable) # Set the containers for the AsteroidField class
     asteroid_field = AsteroidField() # Create an instance of the AsteroidField
-
-    
 
     Player.containers = (updatable, drawable) # Set the containers for the Player class
 

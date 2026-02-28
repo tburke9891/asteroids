@@ -48,6 +48,11 @@ def main():
                 print("Game over!")
                 sys.exit()
                 return
+            for shot in shots:
+                if shot.collides_with(asteroid):
+                    log_event("asteroid_shot")
+                    asteroid.split()
+                    shot.kill() # Remove the shot from all groups
 
         screen.fill("black")  # Clear the screen with black
 

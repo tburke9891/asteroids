@@ -5,6 +5,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from player import Player
+from shot import Shot
 
 
 from logger import log_state, log_event
@@ -17,10 +18,14 @@ def main():
     updatable = pygame.sprite.Group() # Group to hold objects that can be updated
     drawable = pygame.sprite.Group() # Group to hold objects that can be drawn
     asteroids = pygame.sprite.Group() # Group to hold Asteroid instances
+    shots = pygame.sprite.Group() # Group to hold Shot instances
 
     Asteroid.containers = (asteroids, updatable, drawable) # Set the containers for the Asteroid class
+    Shot.containers = (shots, updatable, drawable) # Set the containers for the Shot class
     AsteroidField.containers = (updatable) # Set the containers for the AsteroidField class
     asteroid_field = AsteroidField() # Create an instance of the AsteroidField
+
+    
 
     Player.containers = (updatable, drawable) # Set the containers for the Player class
 

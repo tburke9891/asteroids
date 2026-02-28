@@ -3,20 +3,21 @@ import constants
 from logger import log_state
 
 def main():
-    print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
-    print(f"Screen width: {constants.SCREEN_WIDTH}")
-    print(f"Screen height: {constants.SCREEN_HEIGHT}")
     pygame.init()
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
+    dt = 0 # Delta time for frame rate independence
 
     while True:
         log_state()
-        for event in pygame.event.get():
-            screen.fill((0, 0, 0))  # Clear the screen with black
-            pygame.display.flip()  # Update the display
+        
+        for event in pygame.event.get():    
             if event.type == pygame.QUIT:
-                pygame.quit()
                 return
+            
+        screen.fill("black")  # Clear the screen with black
+        pygame.display.flip()  # Update the display
+        dt = clock.tick(60) / 1000  # Limit to 60 frames per second
 
 if __name__ == "__main__":
     main()

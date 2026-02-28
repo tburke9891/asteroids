@@ -1,15 +1,32 @@
-import constants
-import player
 import pygame
+import sys
 
-from logger import log_state
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from player import Player
+
+
+from logger import log_state, log_event
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    dt = 0 # Delta time for frame rate independence
-    player1 = player.Player(x = constants.SCREEN_WIDTH / 2, y = constants.SCREEN_HEIGHT / 2)
+
+    updatable = pygame.sprite.Group() # Group to hold objects that can be updated
+    drawable = pygame.sprite.Group() # Group to hold objects that can be drawn
+    asteroids = pygame.sprite.Group() # Group to hold Asteroid instances
+
+    Asteroid.containers = (asteroids, updatable, drawable) # Set the containers for the Asteroid class
+    AsteroidField.containers = (updatable) # Set the containers for the AsteroidField class
+    asteroid_field = AsteroidField() # Create an instance of the AsteroidField
+
+    Player.containers = (updatable, drawable) # Set the containers for the Player class
+
+    player = Player(x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2) # Create a player instance
+    
+    dt = 0
 
     while True:
         log_state()
@@ -17,12 +34,25 @@ def main():
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
                 return
-            
+        
+        updatable.update(dt)  # Update all updatable objects
+
+        for asteroid in asteroids:
+            if player.collides_with(asteroid):
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
+                return
+
         screen.fill("black")  # Clear the screen with black
+
+        for obj in drawable:
+            obj.draw(screen)  # Draw all drawable objects
+
         pygame.display.flip()  # Update the display
-        dt = clock.tick(60) / 1000  # Limit to 60 frames per second
-        player1.draw(screen)  # Draw the player
-        player1.update(dt)  # Update the player's state
+
+        dt = clock.tick(60) / 1000  # Limit to 60 frames per second and get delta time in seconds
+
 
 if __name__ == "__main__":
     main()
